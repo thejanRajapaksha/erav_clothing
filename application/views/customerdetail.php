@@ -42,6 +42,14 @@ include "include/topnavbar.php";
                                         <label class="small font-weight-bold">Contact No 2*</label>
                                         <input type="text" class="form-control form-control-sm" name="contact_2" id="contact_2" >
                                     </div>
+                                    <div class="form-group mb-1">
+                                        <label class="small font-weight-bold">Address*</label>
+                                        <input type="text" class="form-control form-control-sm" name="address" id="address" >
+                                    </div>
+                                    <div class="form-group mb-1">
+                                        <label class="small font-weight-bold">NIC*</label>
+                                        <input type="text" class="form-control form-control-sm" name="nic" id="nic" >
+                                    </div>
 
                         			 
                         	<div class="form-group mt-2 text-right">
@@ -55,18 +63,22 @@ include "include/topnavbar.php";
                         </div>
                         
                         <div class="col-9">
-                        	<table class="table table-bordered table-striped table-sm nowrap" id="dataTable">
-                        		<thead>
-                        			<tr>
-                        				<th>#</th>
-                        				<th>Customer Name</th>
-                                        <th>Email</th>
-                        				<th>Contact No 1</th>
-                        				<th>Contact No 2</th>
-                        				<th class="text-right">Actions</th>
-                        			</tr>
-                        		</thead>
-                        	</table>
+                            <div class="scrollbar pb-3" id="style-2">
+                                <table class="table table-bordered table-striped table-sm nowrap" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Customer Name</th>
+                                            <th>Email</th>
+                                            <th>Contact No 1</th>
+                                            <th>Contact No 2</th>
+                                            <th>Address</th>
+                                            <th>NIC</th>
+                                            <th class="text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                         </div>
                     </div>
@@ -133,6 +145,12 @@ include "include/topnavbar.php";
                     "data": "contact_2"
                 },
                 {
+                    "data": "address"
+                },
+                {
+                    "data": "nic"
+                },
+                {
                     "targets": -1,
                     "className": 'text-right',
                     "data": null,
@@ -170,7 +188,9 @@ include "include/topnavbar.php";
                         $('#name').val(obj.name); 
                         $('#email').val(obj.email);                       
                         $('#contact_1').val(obj.contact_1);  
-                        $('#contact_2').val(obj.contact_2);                     
+                        $('#contact_2').val(obj.contact_2);
+                        $('#address').val(obj.address);                     
+                        $('#nic').val(obj.nic);                     
 
                         $('#recordOption').val('2');
                         $('#submitBtn').html('<i class="far fa-save"></i>&nbsp;Update');

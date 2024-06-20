@@ -9,6 +9,9 @@ class Customerdetailinfo extends CI_Model{
         $email=$this->input->post('email');
         $contact_1=$this->input->post('contact_1');
         $contact_2=$this->input->post('contact_2');
+        $address=$this->input->post('address');
+        $nic=$this->input->post('nic');
+
       
         $recordOption=$this->input->post('recordOption');
         if(!empty($this->input->post('recordID'))){$recordID=$this->input->post('recordID');}
@@ -20,7 +23,9 @@ class Customerdetailinfo extends CI_Model{
                 'name'=> $name,
                 'email'=> $email, 
                 'contact_1'=> $contact_1, 
-                'contact_2'=> $contact_2, 
+                'contact_2'=> $contact_2,
+                'address'=> $address, 
+                'nic'=> $nic, 
                 'status'=> '1', 
                 'insertdatetime'=> $insertdatetime, 
                 'tbl_user_idtbl_user'=> $userID,
@@ -68,6 +73,8 @@ class Customerdetailinfo extends CI_Model{
                 'email'=> $email, 
                 'contact_1'=> $contact_1, 
                 'contact_2'=> $contact_2, 
+                'address'=> $address, 
+                'nic'=> $nic,
                 'status'=> '1', 
                 'insertdatetime'=> $insertdatetime, 
                 'tbl_user_idtbl_user'=> $userID,
@@ -268,12 +275,14 @@ class Customerdetailinfo extends CI_Model{
         $obj->email=$respond->row(0)->email;
         $obj->contact_1=$respond->row(0)->contact_1;
         $obj->contact_2=$respond->row(0)->contact_2;
+        $obj->address=$respond->row(0)->address;
+        $obj->nic=$respond->row(0)->nic;
 
         echo json_encode($obj);
     }
 
     public function GetCustomerdetailList(){
-        $this->db->select('idtbl_customer, name, email, contact_1, contact_2');
+        $this->db->select('idtbl_customer, name, email, contact_1, contact_2, address, nic');
         $this->db->from('tbl_customer');
         $this->db->where('status', 1);
 

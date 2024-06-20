@@ -1,120 +1,82 @@
 <?php
-class Inquiryinfo extends CI_Model{
-    public function Inquiryinsertupdate(){
+class Inquiryinfo extends CI_Model {
+    public function Inquiryinsertupdate() {
         $this->db->trans_begin();
-
-        $userID=$_SESSION['userid'];
-
-        $tbl_customer_idtbl_customer=$this->input->post('tbl_customer_idtbl_customer');
-        $tbl_cloth_idtbl_cloth=$this->input->post('tbl_cloth_idtbl_cloth');
-        $tbl_material_idtbl_material=$this->input->post('tbl_material_idtbl_material');
-        $tbl_size_idtbl_size=$this->input->post('tbl_size_idtbl_size');
-        $tbl_colour_idtbl_colour=$this->input->post('tbl_colour_idtbl_colour');
-
-      
-        $recordOption=$this->input->post('recordOption');
-        if(!empty($this->input->post('recordID'))){$recordID=$this->input->post('recordID');}
-
+        
+        $userID = $_SESSION['userid'];
+        $tableData = $this->input->post('data');//json_decode($this->input->post('tableData'), true); 
         $insertdatetime=date('Y-m-d H:i:s');
+        $updatedatetime=date('Y-m-d H:i:s');
+        
+        $tbl_customer_idtbl_customer = $tableData[0]['tbl_customer_idtbl_customer']; 
+        $date = $tableData[0]['date']; 
 
-        if($recordOption==1){
-            $data = array(
-                'tbl_customer_idtbl_customer'=> $tbl_customer_idtbl_customer,
-                'tbl_cloth_idtbl_cloth'=> $tbl_cloth_idtbl_cloth, 
-                'tbl_material_idtbl_material'=> $tbl_material_idtbl_material, 
-                'tbl_size_idtbl_size '=> $tbl_size_idtbl_size, 
-                'tbl_colour_idtbl_colour'=> $tbl_colour_idtbl_colour,
-                'status'=> '1', 
-                'insertdatetime'=> $insertdatetime, 
-                'tbl_user_idtbl_user'=> $userID,
-            );
+        // Insert into tbl_inquiry
+        $inquiryData = [
+            'tbl_customer_idtbl_customer' => $tbl_customer_idtbl_customer,
+            'date' => $date,
+            'status' => '1',
+            'insertdatetime' => $insertdatetime,
+            'tbl_user_idtbl_user' => $userID
+        ];
+        $this->db->insert('tbl_inquiry', $inquiryData);
+        $inquiryID = $this->db->insert_id();
 
-            $this->db->insert('tbl_inquiry', $data);
+        // Insert into tbl_inquiry_detail
+        foreach ($tableData as $rowdata) {
+            $tbl_cloth_idtbl_cloth = $rowdata['tbl_cloth_idtbl_cloth'];
+            $tbl_material_idtbl_material = $rowdata['tbl_material_idtbl_material'];
+            $quantity = $rowdata['quantity'];
 
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-save';
-                $actionObj->title='';
-                $actionObj->message='Record Added Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='success';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Inquiry');                
-            } else {
-                $this->db->trans_rollback();
-
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Inquiry');
-            }
+            $detailData = [
+                'tbl_inquiry_idtbl_inquiry' => $inquiryID,
+                'tbl_cloth_idtbl_cloth' => $tbl_cloth_idtbl_cloth,
+                'tbl_material_idtbl_material' => $tbl_material_idtbl_material,
+                'quantity' => $quantity,
+                'status' => '1',
+                'insertdatetime' => $insertdatetime,
+                'tbl_user_idtbl_user' => $userID
+            ];
+            $this->db->insert('tbl_inquiry_detail', $detailData);
         }
-        else{
-            $data = array(
-                'tbl_customer_idtbl_customer'=> $tbl_customer_idtbl_customer,
-                'tbl_cloth_idtbl_cloth'=> $tbl_cloth_idtbl_cloth, 
-                'tbl_material_idtbl_material'=> $tbl_material_idtbl_material, 
-                'tbl_size_idtbl_size '=> $tbl_size_idtbl_size, 
-                'tbl_colour_idtbl_colour'=> $tbl_colour_idtbl_colour,
-                'status'=> '1', 
-                'insertdatetime'=> $insertdatetime,                
-                'tbl_user_idtbl_user'=> $userID,
-            );
 
-            $this->db->where('idtbl_inquiry', $recordID);
-            $this->db->update('tbl_inquiry', $data);
+        //$this->db->trans_complete();
 
-            $this->db->trans_complete();
+        if ($this->db->trans_status() === TRUE) {
+            $this->db->trans_commit();
+            
+            $actionObj = new stdClass();
+            $actionObj->icon = 'fas fa-save';
+            $actionObj->title = '';
+            $actionObj->message = 'Record Added Successfully';
+            $actionObj->url = '';
+            $actionObj->target = '_blank';
+            $actionObj->type = 'success';
 
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-save';
-                $actionObj->title='';
-                $actionObj->message='Record Update Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='primary';
+            $actionJSON = json_encode($actionObj);
+            
+            $this->session->set_flashdata('msg', $actionJSON);
+            //redirect('Inquiry');                
+            return true;
+        } else {
+            $this->db->trans_rollback();
 
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Inquiry');                
-            } else {
-                $this->db->trans_rollback();
+            $actionObj = new stdClass();
+            $actionObj->icon = 'fas fa-warning';
+            $actionObj->title = '';
+            $actionObj->message = 'Record Error';
+            $actionObj->url = '';
+            $actionObj->target = '_blank';
+            $actionObj->type = 'danger';
 
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Inquiry');
-            }
+            $actionJSON = json_encode($actionObj);
+            
+            $this->session->set_flashdata('msg', $actionJSON);
+            //redirect('Inquiry');
+            return false;
         }
     }
+    
     public function Inquirystatus($x, $y){
         $this->db->trans_begin();
 
@@ -256,33 +218,168 @@ class Inquiryinfo extends CI_Model{
             }
         }
     }
-    public function Inquiryedit(){
-        $recordID=$this->input->post('recordID');
 
+    public function Inquirydetailstatus($x, $y){
+        $this->db->trans_begin();
+
+        $userID=$_SESSION['userid'];
+        $recordID=$x;
+        $type=$y;
+        $updatedatetime=date('Y-m-d H:i:s');
+
+        if($type==1){
+            $data = array( 
+                'status'=> '1', 
+                'updatedatetime'=> $updatedatetime, 
+                'tbl_user_idtbl_user'=> $userID,
+            );
+
+			$this->db->where('idtbl_inquiry_detail', $recordID);
+            $this->db->update('tbl_inquiry_detail', $data);
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === TRUE) {
+                $this->db->trans_commit();
+                
+                $actionObj=new stdClass();
+                $actionObj->icon='fas fa-check';
+                $actionObj->title='';
+                $actionObj->message='Record Activate Successfully';
+                $actionObj->url='';
+                $actionObj->target='_blank';
+                $actionObj->type='success';
+
+                $actionJSON=json_encode($actionObj);
+                
+                $this->session->set_flashdata('msg', $actionJSON);
+                redirect('Inquiry');                
+            } else {
+                $this->db->trans_rollback();
+
+                $actionObj=new stdClass();
+                $actionObj->icon='fas fa-warning';
+                $actionObj->title='';
+                $actionObj->message='Record Error';
+                $actionObj->url='';
+                $actionObj->target='_blank';
+                $actionObj->type='danger';
+
+                $actionJSON=json_encode($actionObj);
+                
+                $this->session->set_flashdata('msg', $actionJSON);
+                redirect('Inquiry');
+            }
+        }
+        else if($type==2){
+            $data = array(
+                'status'=> '2', 
+                'updatedatetime'=> $updatedatetime, 
+                'tbl_user_idtbl_user'=> $userID,
+            );
+
+			$this->db->where('idtbl_inquiry_detail', $recordID);
+            $this->db->update('tbl_inquiry_detail', $data);
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === TRUE) {
+                $this->db->trans_commit();
+                
+                $actionObj=new stdClass();
+                $actionObj->icon='fas fa-times';
+                $actionObj->title='';
+                $actionObj->message='Record Deactivate Successfully';
+                $actionObj->url='';
+                $actionObj->target='_blank';
+                $actionObj->type='warning';
+
+                $actionJSON=json_encode($actionObj);
+                
+                $this->session->set_flashdata('msg', $actionJSON);
+                redirect('Inquiry');                
+            } else {
+                $this->db->trans_rollback();
+
+                $actionObj=new stdClass();
+                $actionObj->icon='fas fa-warning';
+                $actionObj->title='';
+                $actionObj->message='Record Error';
+                $actionObj->url='';
+                $actionObj->target='_blank';
+                $actionObj->type='danger';
+
+                $actionJSON=json_encode($actionObj);
+                
+                $this->session->set_flashdata('msg', $actionJSON);
+                redirect('Inquiry');
+            }
+        }
+        else if($type==3){
+			$data = array( 
+                'status'=> '3', 
+                'updatedatetime'=> $updatedatetime, 
+                'tbl_user_idtbl_user'=> $userID,
+            );
+
+			$this->db->where('idtbl_inquiry_detail', $recordID);
+            $this->db->update('tbl_inquiry_detail', $data);
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === TRUE) {
+                $this->db->trans_commit();
+                
+                $actionObj=new stdClass();
+                $actionObj->icon='fas fa-trash-alt';
+                $actionObj->title='';
+                $actionObj->message='Record Remove Successfully';
+                $actionObj->url='';
+                $actionObj->target='_blank';
+                $actionObj->type='danger';
+
+                $actionJSON=json_encode($actionObj);
+                
+                $this->session->set_flashdata('msg', $actionJSON);
+                redirect('Inquiry');                
+            } else {
+                $this->db->trans_rollback();
+
+                $actionObj=new stdClass();
+                $actionObj->icon='fas fa-warning';
+                $actionObj->title='';
+                $actionObj->message='Record Error';
+                $actionObj->url='';
+                $actionObj->target='_blank';
+                $actionObj->type='danger';
+
+                $actionJSON=json_encode($actionObj);
+                
+                $this->session->set_flashdata('msg', $actionJSON);
+                redirect('Inquiry');
+            }
+        }
+    }
+
+    public function Inquiryedit(){
+        $recordID = $this->input->post('recordID');
+    
         $this->db->select('*');
         $this->db->from('tbl_inquiry');
         $this->db->where('idtbl_inquiry', $recordID);
         $this->db->where('status', 1);
-
-        $respond=$this->db->get();
-
-        $obj=new stdClass();
-        $obj->id=$respond->row(0)->idtbl_inquiry;
-        $obj->tbl_customer_idtbl_customer=$respond->row(0)->tbl_customer_idtbl_customer;
-        $obj->tbl_cloth_idtbl_cloth=$respond->row(0)->tbl_cloth_idtbl_cloth;
-        $obj->tbl_material_idtbl_material=$respond->row(0)->tbl_material_idtbl_material;
-        $obj->tbl_size_idtbl_size=$respond->row(0)->tbl_size_idtbl_size;
-        $obj->tbl_colour_idtbl_colour=$respond->row(0)->tbl_colour_idtbl_colour;
-
-        echo json_encode($obj);
-    }
-
-    public function GetInquiryList(){
-        $this->db->select('idtbl_inquiry, tbl_customer_idtbl_customer, tbl_cloth_idtbl_cloth, tbl_material_idtbl_material, tbl_size_idtbl_size, tbl_colour_idtbl_colour');
-        $this->db->from('tbl_inquiry');
-        $this->db->where('status', 1);
-
-        return $respond=$this->db->get();
+    
+        $respond = $this->db->get();
+    
+        if ($respond->num_rows() > 0) {
+            $obj = new stdClass();
+            $obj->idtbl_inquiry = $respond->row(0)->idtbl_inquiry;
+            $obj->tbl_customer_idtbl_customer = $respond->row(0)->tbl_customer_idtbl_customer;
+            // Add other fields as needed
+            echo json_encode($obj);
+        } else {
+            echo json_encode(null); // Return null if no record found
+        }
     }
 
     public function Getcustomername(){
@@ -304,22 +401,6 @@ class Inquiryinfo extends CI_Model{
     public function Getmaterialtype(){
         $this->db->select('idtbl_material, type');
         $this->db->from('tbl_material');
-        $this->db->where('status', 1);
-
-        return $respond=$this->db->get();
-    }
-
-    public function Getsizetype(){
-        $this->db->select('idtbl_size, type');
-        $this->db->from('tbl_size');
-        $this->db->where('status', 1);
-
-        return $respond=$this->db->get();
-    }
-
-    public function Getcolourtype(){
-        $this->db->select('idtbl_colour, type');
-        $this->db->from('tbl_colour');
         $this->db->where('status', 1);
 
         return $respond=$this->db->get();

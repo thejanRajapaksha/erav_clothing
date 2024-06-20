@@ -30,11 +30,8 @@ $primaryKey = 'idtbl_inquiry';
 // indexes
 $columns = array(
 	array( 'db' => '`u`.`idtbl_inquiry`', 'dt' => 'idtbl_inquiry', 'field' => 'idtbl_inquiry' ),
-	array( 'db' => '`u`.`tbl_customer_idtbl_customer`', 'dt' => 'tbl_customer_idtbl_customer', 'field' => 'tbl_customer_idtbl_customer' ),
-	array( 'db' => '`u`.`tbl_cloth_idtbl_cloth`', 'dt' => 'tbl_cloth_idtbl_cloth', 'field' => 'tbl_cloth_idtbl_cloth' ),
-	array( 'db' => '`u`.`tbl_material_idtbl_material`', 'dt' => 'tbl_material_idtbl_material', 'field' => 'tbl_material_idtbl_material' ),
-	array( 'db' => '`u`.`tbl_size_idtbl_size`', 'dt' => 'tbl_size_idtbl_size', 'field' => 'tbl_size_idtbl_size' ),
-	array( 'db' => '`u`.`tbl_colour_idtbl_colour`', 'dt' => 'tbl_colour_idtbl_colour', 'field' => 'tbl_colour_idtbl_colour' ),
+	array( 'db' => '`ua`.`name`', 'dt' => 'name', 'field' => 'name' ),
+	array( 'db' => '`u`.`date`', 'dt' => 'date', 'field' => 'date' ),
 	array( 'db' => '`u`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
 
@@ -55,7 +52,7 @@ $sql_details = array(
 // require( 'ssp.class.php' );
 require('ssp.customized.class.php' );
 
-$joinQuery = "FROM `tbl_inquiry` AS `u`";
+$joinQuery = "FROM `tbl_inquiry` AS `u` LEFT JOIN `tbl_customer` AS `ua` ON `ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer` ";
 
 $extraWhere = "`u`.`status` IN (1, 2)";
 

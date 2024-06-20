@@ -34,6 +34,8 @@ $columns = array(
 	array( 'db' => '`u`.`email`', 'dt' => 'email', 'field' => 'email' ),
 	array( 'db' => '`u`.`contact_1`', 'dt' => 'contact_1', 'field' => 'contact_1' ),
 	array( 'db' => '`u`.`contact_2`', 'dt' => 'contact_2', 'field' => 'contact_2' ),
+	array( 'db' => '`u`.`address`', 'dt' => 'address', 'field' => 'address' ),
+	array( 'db' => '`u`.`nic`', 'dt' => 'nic', 'field' => 'nic' ),
 	array( 'db' => '`u`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
 
