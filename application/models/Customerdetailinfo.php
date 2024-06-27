@@ -77,7 +77,7 @@ class Customerdetailinfo extends CI_Model{
                 'nic'=> $nic,
                 'status'=> '1', 
                 'insertdatetime'=> $insertdatetime, 
-                'tbl_user_idtbl_user'=> $userID,
+                'updateuser'=> $userID,
             );
 
             $this->db->where('idtbl_customer', $recordID);

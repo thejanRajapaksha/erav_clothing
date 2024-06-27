@@ -1,26 +1,28 @@
 <?php
-class Materialcategoryinfo extends CI_Model{
-    public function Materialcategoryinsertupdate(){
+class Paymenttypeinfo extends CI_Model{
+    public function Paymenttypeinsertupdate(){
         $this->db->trans_begin();
 
         $userID=$_SESSION['userid'];
 
-        $category=$this->input->post('category');
-
+        $type=$this->input->post('type');
+      
         $recordOption=$this->input->post('recordOption');
         if(!empty($this->input->post('recordID'))){$recordID=$this->input->post('recordID');}
 
+        $insertdatetime=date('Y-m-d H:i:s');
         $updatedatetime=date('Y-m-d H:i:s');
+
 
         if($recordOption==1){
             $data = array(
-                'category'=> $category, 
+                'p_type'=> $type, 
                 'status'=> '1', 
-                'insertdatetime'=> $updatedatetime, 
-                'tbl_res_user_idtbl_res_user'=> $userID
+                'insertdatetime'=> $insertdatetime, 
+                'tbl_user_idtbl_user'=> $userID,
             );
 
-            $this->db->insert('tbl_res_material_category', $data);
+            $this->db->insert('tbl_payment', $data);
 
             $this->db->trans_complete();
 
@@ -38,7 +40,7 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');                
+                redirect('Paymenttype');                
             } else {
                 $this->db->trans_rollback();
 
@@ -53,18 +55,19 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');
+                redirect('Paymenttype');
             }
         }
         else{
             $data = array(
-                'category'=> $category, 
-                'updatedatetime' => $updatedatetime,
-                'updateuser'=> $userID
+                'p_type'=> $type, 
+                'status'=> '1', 
+                'updatedatetime'=> $insertdatetime, 
+                'updateuser'=> $userID,
             );
 
-            $this->db->where('idtbl_res_material_category', $recordID);
-            $this->db->update('tbl_res_material_category', $data);
+            $this->db->where('idtbl_payment', $recordID);
+            $this->db->update('tbl_payment', $data);
 
             $this->db->trans_complete();
 
@@ -82,7 +85,7 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');                
+                redirect('Paymenttype');                
             } else {
                 $this->db->trans_rollback();
 
@@ -97,11 +100,11 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');
+                redirect('Paymenttype');
             }
         }
     }
-    public function Materialcategorystatus($x, $y){
+    public function Paymenttypestatus($x, $y){
         $this->db->trans_begin();
 
         $userID=$_SESSION['userid'];
@@ -112,11 +115,12 @@ class Materialcategoryinfo extends CI_Model{
         if($type==1){
             $data = array(
                 'status' => '1',
+                'tbl_user_idtbl_user'=> $userID, 
                 'updatedatetime'=> $updatedatetime
             );
 
-            $this->db->where('idtbl_res_material_category', $recordID);
-            $this->db->update('tbl_res_material_category', $data);
+			$this->db->where('idtbl_payment', $recordID);
+            $this->db->update('tbl_payment', $data);
 
             $this->db->trans_complete();
 
@@ -134,7 +138,7 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');                
+                redirect('Paymenttype');                
             } else {
                 $this->db->trans_rollback();
 
@@ -149,17 +153,18 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');
+                redirect('Paymenttype');
             }
         }
         else if($type==2){
             $data = array(
                 'status' => '2',
+                'tbl_user_idtbl_user'=> $userID, 
                 'updatedatetime'=> $updatedatetime
             );
 
-            $this->db->where('idtbl_res_material_category', $recordID);
-            $this->db->update('tbl_res_material_category', $data);
+			$this->db->where('idtbl_payment', $recordID);
+            $this->db->update('tbl_payment', $data);
 
             $this->db->trans_complete();
 
@@ -177,7 +182,7 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');                
+                redirect('Paymenttype');                
             } else {
                 $this->db->trans_rollback();
 
@@ -192,17 +197,18 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');
+                redirect('Paymenttype');
             }
         }
         else if($type==3){
-            $data = array(
+			$data = array(
                 'status' => '3',
+                'tbl_user_idtbl_user'=> $userID, 
                 'updatedatetime'=> $updatedatetime
             );
 
-            $this->db->where('idtbl_res_material_category', $recordID);
-            $this->db->update('tbl_res_material_category', $data);
+			$this->db->where('idtbl_payment', $recordID);
+            $this->db->update('tbl_payment', $data);
 
             $this->db->trans_complete();
 
@@ -220,7 +226,7 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');                
+                redirect('Paymenttype');                
             } else {
                 $this->db->trans_rollback();
 
@@ -235,24 +241,31 @@ class Materialcategoryinfo extends CI_Model{
                 $actionJSON=json_encode($actionObj);
                 
                 $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialcategory');
+                redirect('Paymenttype');
             }
         }
     }
-    public function Materialcategoryedit(){
+    public function Paymenttypeedit(){
         $recordID=$this->input->post('recordID');
 
         $this->db->select('*');
-        $this->db->from('tbl_res_material_category');
-        $this->db->where('idtbl_res_material_category', $recordID);
+        $this->db->from('tbl_payment');
+        $this->db->where('idtbl_payment', $recordID);
         $this->db->where('status', 1);
 
         $respond=$this->db->get();
 
         $obj=new stdClass();
-        $obj->id=$respond->row(0)->idtbl_res_material_category;
-        $obj->categoryname=$respond->row(0)->category;
-
+        $obj->id=$respond->row(0)->idtbl_payment;
+        $obj->type=$respond->row(0)->p_type;
         echo json_encode($obj);
+    }
+
+    public function GetPaymenttypeList(){
+        $this->db->select('idtbl_payment, p_type');
+        $this->db->from('tbl_payment');
+        $this->db->where('status', 1);
+
+        return $respond=$this->db->get();
     }
 }

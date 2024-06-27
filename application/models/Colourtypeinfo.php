@@ -61,7 +61,7 @@ class Colourtypeinfo extends CI_Model{
                 'type'=> $type, 
                 'status'=> '1', 
                 'updatedatetime'=> $insertdatetime, 
-                'tbl_user_idtbl_user'=> $userID,
+                'updateuser'=> $userID,
             );
 
             $this->db->where('idtbl_colour', $recordID);

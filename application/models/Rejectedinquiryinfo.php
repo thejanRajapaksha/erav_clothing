@@ -24,7 +24,7 @@ class Rejectedinquiryinfo extends CI_Model{
                 'tbl_user_idtbl_user'=> $userID,
             );
 
-            $this->db->insert('tbl_quotation_reject', $data);
+            $this->db->insert('tbl_quotation', $data);
 
             $this->db->trans_complete();
 
@@ -70,8 +70,8 @@ class Rejectedinquiryinfo extends CI_Model{
                 'tbl_user_idtbl_user'=> $userID,
             );
 
-            $this->db->where('idtbl_quotation_reject', $recordID);
-            $this->db->update('tbl_quotation_reject', $data);
+            $this->db->where('idtbl_quotation', $recordID);
+            $this->db->update('tbl_quotation', $data);
 
             $this->db->trans_complete();
 
@@ -123,8 +123,8 @@ class Rejectedinquiryinfo extends CI_Model{
                 'tbl_user_idtbl_user'=> $userID,
             );
 
-			$this->db->where('idtbl_quotation_reject', $recordID);
-            $this->db->update('tbl_quotation_reject', $data);
+			$this->db->where('idtbl_quotation', $recordID);
+            $this->db->update('tbl_quotation', $data);
 
             $this->db->trans_complete();
 
@@ -167,8 +167,8 @@ class Rejectedinquiryinfo extends CI_Model{
                 'tbl_user_idtbl_user'=> $userID,
             );
 
-			$this->db->where('idtbl_quotation_reject', $recordID);
-            $this->db->update('tbl_quotation_reject', $data);
+			$this->db->where('idtbl_quotation', $recordID);
+            $this->db->update('tbl_quotation', $data);
 
             $this->db->trans_complete();
 
@@ -211,8 +211,8 @@ class Rejectedinquiryinfo extends CI_Model{
                 'tbl_user_idtbl_user'=> $userID,
             );
 
-			$this->db->where('idtbl_quotation_reject', $recordID);
-            $this->db->update('tbl_quotation_reject', $data);
+			$this->db->where('idtbl_quotation', $recordID);
+            $this->db->update('tbl_quotation', $data);
 
             $this->db->trans_complete();
 
@@ -253,14 +253,14 @@ class Rejectedinquiryinfo extends CI_Model{
         $recordID=$this->input->post('recordID');
 
         $this->db->select('*');
-        $this->db->from('tbl_quotation_reject');
-        $this->db->where('idtbl_quotation_reject', $recordID);
+        $this->db->from('tbl_quotation');
+        $this->db->where('idtbl_quotation', $recordID);
         $this->db->where('status', 1);
 
         $respond=$this->db->get();
 
         $obj=new stdClass();
-        $obj->id=$respond->row(0)->idtbl_quotation_reject;
+        $obj->id=$respond->row(0)->idtbl_quotation;
         $obj->tbl_reason_idtbl_reason=$respond->row(0)->tbl_reason_idtbl_reason;
         $obj->tbl_quotation_idtbl_quotation=$respond->row(0)->tbl_quotation_idtbl_quotation;
         $obj->remarks=$respond->row(0)->remarks;
@@ -269,8 +269,8 @@ class Rejectedinquiryinfo extends CI_Model{
     }
 
     public function GetRejectedinquiryList(){
-        $this->db->select('idtbl_quotation_reject, tbl_reason_idtbl_reason, tbl_quotation_idtbl_quotation, remarks');
-        $this->db->from('tbl_quotation_reject');
+        $this->db->select('idtbl_quotation, tbl_reason_idtbl_reason, tbl_quotation_idtbl_quotation, remarks');
+        $this->db->from('tbl_quotation');
         $this->db->where('status', 1);
 
         return $respond=$this->db->get();

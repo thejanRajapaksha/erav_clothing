@@ -95,6 +95,18 @@ else if($functionmenu=='Suppliertype'){
     $statuscheck=checkprivilege($menuprivilegearray, 15, 3);
     $deletecheck=checkprivilege($menuprivilegearray, 15, 4);
 }
+else if($functionmenu=='Paymenttype'){
+    $addcheck=checkprivilege($menuprivilegearray, 16, 1);
+    $editcheck=checkprivilege($menuprivilegearray, 16, 2);
+    $statuscheck=checkprivilege($menuprivilegearray, 16, 3);
+    $deletecheck=checkprivilege($menuprivilegearray, 16, 4);
+}
+else if($functionmenu2=='Getquotation'){
+	$addcheck=checkprivilege($menuprivilegearray, 38, 1);
+	$editcheck=checkprivilege($menuprivilegearray, 38, 2);
+	$statuscheck=checkprivilege($menuprivilegearray, 38, 3);
+	$deletecheck=checkprivilege($menuprivilegearray, 38, 4);
+}
  
 function checkprivilege($arraymenu, $menuID, $type){
     foreach($arraymenu as $array){
@@ -127,13 +139,13 @@ function checkprivilege($arraymenu, $menuID, $type){
             </a>
 
 
-            <?php if(menucheck($menuprivilegearray, 5)==1 | menucheck($menuprivilegearray, 6)==1 | menucheck($menuprivilegearray, 7)==1 | menucheck($menuprivilegearray, 8)==1){ ?>
+            <?php if(menucheck($menuprivilegearray, 5)==1 | menucheck($menuprivilegearray, 6)==1 | menucheck($menuprivilegearray, 7)==1 | menucheck($menuprivilegearray, 8)==1 | menucheck($menuprivilegearray, 16)==1){ ?>
             <a class="nav-link p-0 px-3 py-2 collapsed text-dark" href="javascript:void(0);" data-toggle="collapse" data-target="#collapsecategoryinfo" aria-expanded="false" aria-controls="collapsecategoryinfo">
                 <div class="nav-link-icon"><i class="fas fa-shopping-basket"></i></div>
                 Categories
                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
-            <div class="collapse <?php if($controllermenu=="Clothtype" | $controllermenu=="Colourtype" | $controllermenu=="Materialtype" | $controllermenu=="Sizetype" ){echo 'show';} ?>" id="collapsecategoryinfo" data-parent="#accordionSidenav">
+            <div class="collapse <?php if($controllermenu=="Clothtype" | $controllermenu=="Colourtype" | $controllermenu=="Materialtype" | $controllermenu=="Sizetype" | $controllermenu=="Paymenttype" ){echo 'show';} ?>" id="collapsecategoryinfo" data-parent="#accordionSidenav">
                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                     <?php if(menucheck($menuprivilegearray, 5)==1){ ?>
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Clothtype'; ?>">Cloth type</a>
@@ -141,6 +153,8 @@ function checkprivilege($arraymenu, $menuID, $type){
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Colourtype'; ?>">Colour type</a>
                     <?php } if(menucheck($menuprivilegearray, 7)==1){ ?>
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Materialtype'; ?>">Material type</a>
+                    <?php } if(menucheck($menuprivilegearray, 16)==1){ ?>
+                    <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Paymenttype'; ?>">Payment type </a>
                     <?php } if(menucheck($menuprivilegearray, 8)==1){ ?>
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Sizetype'; ?>">Sizes </a>
                     <?php } ?>
@@ -161,7 +175,7 @@ function checkprivilege($arraymenu, $menuID, $type){
                     <?php } if(menucheck($menuprivilegearray, 10)==1){ ?>
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Quotation'; ?>">Quotation</a>
                     <?php } if(menucheck($menuprivilegearray, 11)==1){ ?>
-                    <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Rejectedinquiry'; ?>">Reject Inquiries</a>
+                    <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Rejectedinquiry'; ?>">Quotation Status</a>
                     <?php } if(menucheck($menuprivilegearray, 12)==1){ ?>
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Reasontype'; ?>">Reason Type </a>
                     <?php } ?>

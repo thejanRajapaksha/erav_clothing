@@ -19,20 +19,18 @@
  */
 
 // DB table to use
-$table = 'tbl_quotation_reject';
+$table = 'tbl_payment';
 
 // Table's primary key
-$primaryKey = 'idtbl_quotation_reject';
+$primaryKey = 'idtbl_payment';
 
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database, while the `dt`
 // parameter represents the DataTables column identifier. In this case simple
 // indexes
 $columns = array(
-	array( 'db' => '`u`.`idtbl_quotation_reject`', 'dt' => 'idtbl_quotation_reject', 'field' => 'idtbl_quotation_reject' ),
-	array( 'db' => '`u`.`tbl_reason_idtbl_reason`', 'dt' => 'tbl_reason_idtbl_reason', 'field' => 'tbl_reason_idtbl_reason' ),
-	array( 'db' => '`u`.`tbl_quotation_idtbl_quotation`', 'dt' => 'tbl_quotation_idtbl_quotation', 'field' => 'tbl_quotation_idtbl_quotation' ),
-	array( 'db' => '`u`.`remarks`', 'dt' => 'remarks', 'field' => 'remarks' ),
+	array( 'db' => '`u`.`idtbl_payment`', 'dt' => 'idtbl_payment', 'field' => 'idtbl_payment' ),
+	array( 'db' => '`u`.`p_type`', 'dt' => 'p_type', 'field' => 'p_type' ),
 	array( 'db' => '`u`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
 
@@ -53,7 +51,7 @@ $sql_details = array(
 // require( 'ssp.class.php' );
 require('ssp.customized.class.php' );
 
-$joinQuery = "FROM `tbl_quotation_reject` AS `u`";
+$joinQuery = "FROM `tbl_payment` AS `u`";
 
 $extraWhere = "`u`.`status` IN (1, 2)";
 

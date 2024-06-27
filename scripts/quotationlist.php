@@ -19,20 +19,20 @@
  */
 
 // DB table to use
-$table = 'tbl_quotation';
+$table = 'tbl_inquiry';
 
 // Table's primary key
-$primaryKey = 'idtbl_quotation';
+$primaryKey = 'idtbl_inquiry';
 
 // Array of database columns which should be read and sent back to DataTables.
 // The `db` parameter represents the column name in the database, while the `dt`
 // parameter represents the DataTables column identifier. In this case simple
 // indexes
 $columns = array(
-	array( 'db' => '`u`.`idtbl_quotation`', 'dt' => 'idtbl_quotation', 'field' => 'idtbl_quotation' ),
+	array( 'db' => '`u`.`idtbl_inquiry`', 'dt' => 'idtbl_inquiry', 'field' => 'idtbl_inquiry' ),
+	array( 'db' => '`ua`.`name`', 'dt' => 'name', 'field' => 'name' ),
+	array( 'db' => '`ua`.`idtbl_customer`', 'dt' => 'idtbl_customer', 'field' => 'idtbl_customer' ),
 	array( 'db' => '`u`.`date`', 'dt' => 'date', 'field' => 'date' ),
-	array( 'db' => '`u`.`tbl_inquiry_idtbl_inquiry`', 'dt' => 'tbl_inquiry_idtbl_inquiry', 'field' => 'tbl_inquiry_idtbl_inquiry' ),
-	array( 'db' => '`u`.`total`', 'dt' => 'total', 'field' => 'total' ),
 	array( 'db' => '`u`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
 
@@ -53,7 +53,7 @@ $sql_details = array(
 // require( 'ssp.class.php' );
 require('ssp.customized.class.php' );
 
-$joinQuery = "FROM `tbl_quotation` AS `u`";
+$joinQuery = "FROM `tbl_inquiry` AS `u` LEFT JOIN `tbl_customer` AS `ua` ON `ua`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer` ";
 
 $extraWhere = "`u`.`status` IN (1, 2)";
 
