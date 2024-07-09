@@ -35,6 +35,7 @@ $columns = array(
     array( 'db' => '`d`.`type`', 'dt' => 'type', 'field' => 'type' ),
     // array( 'db' => '`u`.`tbl_material_idtbl_material`', 'dt' => 'tbl_material_idtbl_material', 'field' => 'tbl_material_idtbl_material' ),
     array( 'db' => '`d`.`mattype`', 'dt' => 'mattype', 'field' => 'mattype' ),
+    array( 'db' => '`d`.`sname`', 'dt' => 'sname', 'field' => 'sname' ),
     array( 'db' => '`d`.`quantity`', 'dt' => 'quantity', 'field' => 'quantity' ),
     array( 'db' => '`d`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
@@ -56,10 +57,11 @@ $sql_details = array(
 // require( 'ssp.class.php' );
 require('ssp.customized.class.php');
 
-$joinQuery = "from (select u.*, c.type, m.type as mattype 
+$joinQuery = "from (select u.*, c.type, m.type as mattype , s.name as sname 
     FROM `tbl_inquiry_detail` AS `u`
     LEFT JOIN `tbl_cloth` AS `c` ON `u`.`tbl_cloth_idtbl_cloth` = `c`.`idtbl_cloth`
     LEFT JOIN `tbl_material` AS `m` ON `u`.`tbl_material_idtbl_material` = `m`.`idtbl_material`
+    LEFT JOIN `tbl_salesrep` AS `s` ON `u`.`tbl_salesrep_idtbl_salesrep` = `s`.`idtbl_salesrep`
 ) as d";
 
 $ID = $_POST['id'];

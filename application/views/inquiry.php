@@ -22,7 +22,7 @@ include "include/topnavbar.php";
                 <div class="card">
                     <div class="card-body p-0 p-2">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <form method="post" autocomplete="off" id="grnform">
                                     <div class="form-group mb-1">
                                         <label class="small font-weight-bold">Customer Name*</label>
@@ -35,7 +35,17 @@ include "include/topnavbar.php";
                                             <?php } ?>
                                         </select>
                                     </div>
-
+                                    <div class="form-group mb-1">
+                                        <label class="small font-weight-bold">Sales Rep Name*</label>
+                                        <select class="form-control form-control-sm" name="salesrepname"
+                                            id="salesrepname" required>
+                                            <option value="">Select</option>
+                                            <?php foreach($Salesrepname->result() as $rowSalesrepname){ ?>
+                                            <option value="<?php echo $rowSalesrepname->idtbl_salesrep ?>">
+                                                <?php echo $rowSalesrepname->name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                     <div class="form-group mb-1">
                                         <label class="small font-weight-bold">Cloth type*</label>
                                         <select class="form-control form-control-sm" name="clothtype"
@@ -79,11 +89,12 @@ include "include/topnavbar.php";
                                     <input type="hidden" name="recordOption" id="recordOption" value="1">
                                     <input type="hidden" name="recordID" id="recordID" value="">
                                     <input type="hidden" id="hinquiry_id" value="">
-                                </form>
+                                </form> &nbsp;
                                 <table class="table table-bordered table-striped table-sm nowrap mt-3" id="dataTable">
                                     <thead>
                                         <tr>
                                             <th>Customer Name</th>
+                                            <th>Sales Rep Name</th>
                                             <th>Date</th>
                                             <th>Cloth Type</th>
                                             <th>Material Type</th>
@@ -97,7 +108,7 @@ include "include/topnavbar.php";
                                     <button type="button" id="submitdata" class="btn btn-primary btn-sm px-4"><i class="far fa-save"></i>&nbsp;Submit All</button>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-8">
                                 <table class="table table-bordered table-striped table-sm nowrap" id="inquiryTable">
                                     <thead>
                                         <tr>
@@ -124,6 +135,7 @@ include "include/topnavbar.php";
                                                 <thead>
                                                     <tr>
                                                         <th>Inquiry ID</th>
+                                                        <th>Sales Rep Name</th>
                                                         <th>Cloth Type</th>
                                                         <th>Material Type</th>
                                                         <th>Quantity</th>
@@ -241,6 +253,9 @@ include "include/topnavbar.php";
                     "data": "tbl_inquiry_idtbl_inquiry"
                 },
                 {
+                    "data": "sname"
+                },
+                {
                     "data": "type"
                 },
                 {
@@ -285,6 +300,8 @@ include "include/topnavbar.php";
             } else {
                 var customernameid = $('#customername').val();
                 var customername = $('#customername option:selected').text();
+                var salesrepnameid = $('#salesrepname').val();
+                var salesrepname = $('#salesrepname option:selected').text();
                 var clothtypeid = $('#clothtype').val();
                 var clothtype = $('#clothtype option:selected').text();   
                 var materialtypeid = $('#materialtype').val();
@@ -293,6 +310,7 @@ include "include/topnavbar.php";
                 var date = $('#date').val();
 
                 $('#dataTable > tbody:last').append('<tr><td>' + customername +
+                    '</td><td>' + salesrepname +
                     '</td><td>' + date +
                     '</td><td data-id="'+clothtypeid+'">' + clothtype +
                     '</td><td data-id="'+materialtypeid+'">' + materialtype +
@@ -316,10 +334,11 @@ include "include/topnavbar.php";
             $('#dataTable tbody tr').each(function() {
                 var row = {
                     tbl_customer_idtbl_customer: $('#customername').val(),
+                    tbl_salesrep_idtbl_salesrep: $('#salesrepname').val(),
                     date: $('#date').val(),
-                    tbl_cloth_idtbl_cloth: $(this).find('td:eq(2)').data('id'),
-                    tbl_material_idtbl_material: $(this).find('td:eq(3)').data('id'),
-                    quantity: $(this).find('td:eq(4)').text()
+                    tbl_cloth_idtbl_cloth: $(this).find('td:eq(3)').data('id'),
+                    tbl_material_idtbl_material: $(this).find('td:eq(4)').data('id'),
+                    quantity: $(this).find('td:eq(5)').text()
                 };
                 tableData.push(row);
             });

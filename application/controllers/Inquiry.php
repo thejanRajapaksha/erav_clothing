@@ -9,6 +9,7 @@ class Inquiry extends CI_Controller {
         $this->load->model('Inquiryinfo');
 		$result['menuaccess']=$this->Commeninfo->Getmenuprivilege();
 		$result['Customername']=$this->Inquiryinfo->Getcustomername();
+		$result['Salesrepname']=$this->Inquiryinfo->Getsalesrepname();
 		$result['Clothtype']=$this->Inquiryinfo->Getclothtype();
 		$result['Materialtype']=$this->Inquiryinfo->Getmaterialtype();
 		$this->load->view('inquiry', $result);

@@ -181,47 +181,81 @@ include "include/topnavbar.php";
 	</div>
 </div>
 
-<!-- Modal quotation details -->
+<!-- Modal Quotation Details -->
 <div class="modal fade" id="quotationmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="page-header-title font-weight-bold">
-					<div class="page-header-icon"><i class="fas fa-address-book"></i> <span>Quotation Details</span></div>
-				</h1>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeCD">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div>
-					</div>
-					<div class="col-12">
-						<div class="scrollbar pb-3" id="style-2">
-							<table class="table table-bordered table-striped table-sm nowrap">
-								<thead>
-									<tr>
-										<th>#</th>
-										<th class="d-none"></th>
-										<th>Due Date</th>
-										<th>Description</th>
-										<th>Quantity</th>
-										<th>Price</th>
-										<th class="text-right">Total</th>
-									</tr>
-								</thead>
-								<tbody id="getquotationdataform">
-
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="page-header-title font-weight-bold">
+                    <div class="page-header-icon"><i class="fas fa-address-book"></i> <span>Quotation Details</span></div>
+                </h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeCD">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="scrollbar pb-3" id="style-2">
+                            <table class="table table-bordered table-striped table-sm nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="d-none"></th>
+                                        <th>Due Date</th>
+                                        <th>Description</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="getquotationdataform">
+                                    <!-- Quotation details will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-right">
+                    <button class="btn btn-success approvebtn" value="1">Approve Quotation</button>
+                    <button class="btn btn-danger approvebtnelse" value="2">Disapprove Quotation</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Disapproval Modal -->
+<div class="modal fade" id="disapprovalModal" tabindex="-1" role="dialog" aria-labelledby="disapprovalModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="disapprovalModalLabel">Disapprove Quotation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="disapprovalForm">
+                    <div class="form-group">
+                        <label for="disapprovalReason">Reason for Disapproval</label>
+                        <select class="form-control" id="disapprovalReason" required>
+                            <option value="">Select </option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="additionalReason">Additional Comments</label>
+                        <textarea class="form-control" id="additionalReason" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger" value="2">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="inquiryCancelModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -241,10 +275,9 @@ include "include/topnavbar.php";
 					<input type="hidden" id="agentMobileNum">
 				</div>
 				<div class="modal-footer">
-					<button type="button" id="btnDeleteAgentMsg" class="btn btn-outline-danger btn-sm"
-					 <?php if ($deletecheck == 0) {
-							echo 'disabled';
-						} ?>><i class="fas fa-trash-alt"></i>&nbsp;Cancel Quotation</button>
+					<button type="button" id="btnDeleteAgentMsg" class="btn btn-outline-danger btn-sm" <?php if ($deletecheck == 0) {
+																											echo 'disabled';
+																										} ?>><i class="fas fa-trash-alt"></i>&nbsp;Cancel Quotation</button>
 				</div>
 			</form>
 		</div>
@@ -379,22 +412,22 @@ include "include/topnavbar.php";
 					"data": null,
 					"render": function(data, type, full) {
 						var button = '';
-						button += '<button class="btn btn-primary btn-sm btnlistview mr-1" id="' + full['idtbl_quotation'] + '" data-toggle="tooltip" data-placement="bottom" title="View list image"><i class="fa fa-eye" aria-hidden="true"></i></button>';
-						if (full['approvestatus'] == 1) {
-							button += '<button  id="' + full['idtbl_quotation'] + '" target="_self" class="btn btn-dark btn-sm mr-1 approvebtn" value ="2"  data-toggle="tooltip" data-placement="bottom" title="Disapprove Quotation"';
-							if (statuscheck != 1) {
-								button += 'd-none';
-							}
-							button += '"><i class="fas fa-check"></i></a>';
-						} else {
-							button += '<button id="' + full['idtbl_quotation'] + '"  target="_self" class="btn btn-light btn-sm mr-1 approvebtnelse" value ="1" data-toggle="tooltip" data-placement="bottom" title="Approve Quotation"';
-							if (statuscheck != 1) {
-								button += 'd-none';
-							}
-							button += '"><i class="fas fa-times"></i></a>';
+						button += '<button class="btn btn-primary btn-sm btnlistview mr-1" id="' + full['idtbl_quotation'] + '" data-id="' + full['idtbl_quotation'] + '" data-toggle="tooltip" data-placement="bottom" title="View list image"><i class="fa fa-eye" aria-hidden="true"></i></button>';
+						// if (full['approvestatus'] == 1) {
+						// 	button += '<button  id="' + full['idtbl_quotation'] + '" target="_self" class="btn btn-secondary btn-sm mr-1 approvebtn" value ="2"  data-toggle="tooltip" data-placement="bottom" title="Disapprove Quotation"';
+						// 	if (statuscheck != 1) {
+						// 		button += 'd-none';
+						// 	}
+						// 	button += '"><i class="fas fa-check"></i></a>';
+						// } else {
+						// 	button += '<button id="' + full['idtbl_quotation'] + '"  target="_self" class="btn btn-danger btn-sm mr-1 approvebtnelse" value ="1" data-toggle="tooltip" data-placement="bottom" title="Approve Quotation"';
+						// 	if (statuscheck != 1) {
+						// 		button += 'd-none';
+						// 	}
+						// 	button += '"><i class="fas fa-times"></i></a>';
 
-						}
-						button += '<button class="btn btn-info btn-sm btninfo mr-1" id="' + full['idtbl_quotation'] + '" data-toggle="tooltip" data-placement="bottom" title="Quotation Details"><i class="fa fa-info-circle" aria-hidden="true"></i></button>';
+						// }
+						button += '<button class="btn btn-primary btn-sm btninfo mr-1" id="' + full['idtbl_quotation'] + '" data-toggle="tooltip" data-placement="bottom" title="Quotation Details"><i class="fa fa-info-circle" aria-hidden="true"></i></button>';
 
 						if (full['approvestatus'] == 0) {
 							button += '<button disabled target="_blank" class="btn btn-danger btn-sm btnPdf mr-1" id="' + full['idtbl_quotation'] + '" data-toggle="tooltip" data-placement="bottom" title="Quotation PDF"><i class="fas fa-file-pdf"></i></button>';
@@ -432,108 +465,112 @@ include "include/topnavbar.php";
 		});
 
 		$('#dataTable').on('click', '.btninfo', function() {
-
 			var cusId = $(this).attr('id');
-			//	alert(cusId);
+
 			$.ajax({
 				type: "POST",
 				data: {
 					cusId: cusId,
-
 				},
 				url: '<?php echo base_url() ?>Quotationform/Quotationformgetinfodata',
-				success: function(result) { //alert(result);
-					//console.log(result);
-					$('#quotationmodal').modal('show');
+				success: function(result) {
 					$('#getquotationdataform').html(result);
+					$('#quotationmodal').data('idtbl_quotation', cusId).modal('show');
+				}
+			});
+		});
 
+		$("#disapprovalReason").select2({
+			dropdownParent: $('#disapprovalModal'),
+			ajax: {
+				url: "<?php echo base_url() ?>Quotationform/Getreasontype",
+				type: "post",
+				dataType: 'json',
+				delay: 250,
+				data: function(params) {
+					return {
+						searchTerm: params.term // search term
+					};
+				},
+				processResults: function(response) {
+					return {
+						results: response
+					};
+				},
+				cache: true
+			}
+		});
+
+		$(document).ready(function() {
+			// Event handler for approve buttons
+			$('#quotationmodal').on('click', '.approvebtn', function() {
+				var recordID = $('#quotationmodal').data('idtbl_quotation');
+				var type = $(this).val();
+
+				var confirmationMessage = type == 2 ? "Are you sure, You want to disapprove this?" : "Are you sure, You want to approve this?";
+				var r = confirm(confirmationMessage);
+
+				if (r == true) {
+					$.ajax({
+						type: "POST",
+						data: {
+							recordID: recordID,
+							type: type,
+						},
+						url: '<?php echo base_url() ?>Quotationform/Quotationformapprovestatus',
+						success: function(result) {
+							var obj = JSON.parse(result);
+							if (obj.status == 1) {
+								setTimeout(function() {
+									window.location.reload();
+								}, 700);
+							}
+							action(obj.action);
+						}
+					});
 				}
 			});
 
-			//Getquotation(quotationId);
+			$('#quotationmodal').on('click', '.approvebtnelse', function() {
+				$('#disapprovalModal').modal('show');
+			});
 
-		});
+			// Event handler for reject buttons
+			$('#disapprovalForm').on('submit', function(event) {
+				event.preventDefault(); // Prevent default form submission
 
+				var recordID = $('#quotationmodal').data('idtbl_quotation');
+				var reasonID = $('#disapprovalReason').val(); // Get the value from the select input
+				var reasonAdd = $('#additionalReason').val(); // Get the value from the textarea
+				var type = $(this).find('button[type="submit"]').val();
 
+				var confirmationMessage = type == 2 ? "Are you sure, You want to disapprove this?" : "Are you sure, You want to approve this?";
+				var r = confirm(confirmationMessage);
 
-		$('#dataTable').on('click', '.approvebtn', function() {
-
-			var recordID = $(this).attr('id');
-			var type = $('.approvebtn').val();
-			//alert(recordID);
-			//alert(type);
-			if (type == 2) {
-				var r = confirm("Are you sure, You want to disapprove this ? ");
-
-			} else {
-				var r = confirm("Are you sure, You want to approve this ? ");
-			}
-
-			if (r == true) {
-
-				$.ajax({
-					type: "POST",
-					data: {
-						recordID: recordID,
-						type: type,
-
-					},
-					url: '<?php echo base_url() ?>Quotationform/Quotationformapprovestatus',
-					success: function(result) { //alert(result);
-						var obj = JSON.parse(result);
-						if (obj.status == 1) {
-
-							setTimeout(function() {
-								window.location.reload();
-
-							}, 700);
+				if (r == true) {
+					$.ajax({
+						type: "POST",
+						data: {
+							recordID: recordID,
+							type: type,
+							reasonID: reasonID,
+							reasonAdd: reasonAdd,
+						},
+						url: '<?php echo base_url() ?>Quotationform/Quotationformapprovestatus',
+						success: function(result) {
+							var obj = JSON.parse(result);
+							if (obj.status == 1) {
+								setTimeout(function() {
+									window.location.reload();
+								}, 700);
+							}
+							action(obj.action);
 						}
-						action(obj.action);
-					}
-				});
-			}
-
+					});
+				}
+			});
 		});
 
-		$('#dataTable').on('click', '.approvebtnelse', function() {
-
-			var recordID = $(this).attr('id');
-			var type = $('.approvebtnelse').val();
-
-			//alert(recordID);
-			//alert(type);
-			if (type == 2) {
-				var r = confirm("Are you sure, You want to disapprove this ? ");
-
-			} else {
-				var r = confirm("Are you sure, You want to approve this ? ");
-			}
-
-			if (r == true) {
-
-				$.ajax({
-					type: "POST",
-					data: {
-						recordID: recordID,
-						type: type,
-
-					},
-					url: '<?php echo base_url() ?>Quotationform/Quotationformapprovestatus',
-					success: function(result) { //alert(result);
-						var obj = JSON.parse(result);
-						if (obj.status == 1) {
-
-							setTimeout(function() {
-								window.location.reload();
-
-							}, 700);
-						}
-						action(obj.action);
-					}
-				});
-			}
-
-		});
 
 		$('#dataTable').on('click', '.btnstatus', function() {
 

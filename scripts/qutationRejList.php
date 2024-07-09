@@ -42,6 +42,8 @@ $columns = array(
 	array( 'db' => '`ua`.`idtbl_inquiry`', 'dt' => 'idtbl_inquiry', 'field' => 'idtbl_inquiry' ),
 	array( 'db' => '`ub`.`idtbl_customer`', 'dt' => 'idtbl_customer', 'field' => 'idtbl_customer' ),
 	array( 'db' => '`ub`.`name`', 'dt' => 'name', 'field' => 'name' ),
+	array( 'db' => '`uc`.`idtbl_reason`', 'dt' => 'idtbl_reason', 'field' => 'idtbl_reason' ),
+	array( 'db' => '`uc`.`type`', 'dt' => 'type', 'field' => 'type' ),
 	array( 'db' => '`u`.`approvestatus`', 'dt' => 'approvestatus', 'field' => 'approvestatus' ),
 	array( 'db' => '`u`.`status`', 'dt' => 'status', 'field' => 'status' )
 );
@@ -66,10 +68,11 @@ require('ssp.customized.class.php' );
 // $getid = $_POST['getid'];
 
 $joinQuery = "FROM `tbl_quotation` AS `u` 
-              LEFT JOIN `tbl_inquiry` AS `ua` ON (`ua`.`idtbl_inquiry` = `u`.`tbl_inquiry_idtbl_inquiry`) 
+              LEFT JOIN `tbl_inquiry` AS `ua` ON (`ua`.`idtbl_inquiry` = `u`.`tbl_inquiry_idtbl_inquiry`)
+              LEFT JOIN `tbl_reason` AS `uc` ON (`uc`.`idtbl_reason` = `u`.`tbl_reason_idtbl_reason`) 
               LEFT JOIN `tbl_customer` AS `ub` ON (`ub`.`idtbl_customer` = `u`.`tbl_customer_idtbl_customer`)";
 
-$extraWhere = "`u`.`status` IN (3) ";
+$extraWhere = "`u`.`approvestatus` IN (2) ";
 // AND `u`.`tbl_inquiry_idtbl_inquiry` = '$getid'
 
 echo json_encode(

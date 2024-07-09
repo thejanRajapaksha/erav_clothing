@@ -101,6 +101,12 @@ else if($functionmenu=='Paymenttype'){
     $statuscheck=checkprivilege($menuprivilegearray, 16, 3);
     $deletecheck=checkprivilege($menuprivilegearray, 16, 4);
 }
+else if($functionmenu=='Salesrepdetail'){
+    $addcheck=checkprivilege($menuprivilegearray, 17, 1);
+    $editcheck=checkprivilege($menuprivilegearray, 17, 2);
+    $statuscheck=checkprivilege($menuprivilegearray, 17, 3);
+    $deletecheck=checkprivilege($menuprivilegearray, 17, 4);
+}
 else if($functionmenu2=='Getquotation'){
 	$addcheck=checkprivilege($menuprivilegearray, 38, 1);
 	$editcheck=checkprivilege($menuprivilegearray, 38, 2);
@@ -193,6 +199,21 @@ function checkprivilege($arraymenu, $menuID, $type){
                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                     <?php if(menucheck($menuprivilegearray, 13)==1){ ?>
                     <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Orderdetail'; ?>">Order detail</a>
+                    <?php } ?>
+                </nav>
+            </div>
+            <?php } ?>
+
+            <?php if(menucheck($menuprivilegearray, 4)==1){ ?>
+            <a class="nav-link p-0 px-3 py-2 collapsed text-dark" href="javascript:void(0);" data-toggle="collapse" data-target="#collapsesalesrepinfo" aria-expanded="false" aria-controls="collapsesalesrepinfo">
+                <div class="nav-link-icon"><i class="fas fa-user"></i></div>
+                Sales Rep
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse <?php if($functionmenu=="Salesrepdetail" ){echo 'show';} ?>" id="collapsesalesrepinfo" data-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                    <?php if(menucheck($menuprivilegearray, 14)==1){ ?>
+                    <a class="nav-link p-0 px-3 py-1 text-dark" href="<?php echo base_url().'Salesrepdetail'; ?>">Sales Rep Detail</a>
                     <?php } ?>
                 </nav>
             </div>

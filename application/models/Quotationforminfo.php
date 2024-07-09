@@ -287,7 +287,7 @@ class Quotationforminfo extends CI_Model
                                 'imgtype' => '0',
                                 'status' => '1',
                                 'updatedatetime' => $updatedatetime,
-                                'tbl_userid' => $userID,
+                                'tbl_user_idtbl_user' => $userID,
                                 'tbl_quotation_idtbl_quotation' => $tbl_quotation_idtbl_quotation,
                             );
                             $this->db->insert('tbl_product_image', $imquery);
@@ -556,6 +556,8 @@ class Quotationforminfo extends CI_Model
         $userID = $_SESSION['userid'];
         $recordID = $this->input->post('recordID');
         $type = $this->input->post('type');
+        $reasonID = $this->input->post('reasonID');
+        $reasonAdd = $this->input->post('reasonAdd');
         $updatedatetime = date('Y-m-d H:i:s');
 
         if ($type == 1) {
@@ -611,11 +613,13 @@ class Quotationforminfo extends CI_Model
             }
         } else if ($type == 2) {
             $data2 = array(
-                'approvestatus' => '0',
-                'approvedate' => '0',
-                'approveuser' => '0',
-                //'updateuser' => $userID,
-                'updatedatetime' => $updatedatetime
+                'approvestatus' => '2',
+                'approvedate' => $updatedatetime,
+                'approveuser' => $userID,
+                // 'updateuser' => $userID,
+                'updatedatetime' => $updatedatetime,
+                'tbl_reason_idtbl_reason' => $reasonID,
+                'reject_resone' => $reasonAdd
             );
 
             $this->db->where('idtbl_quotation', $recordID);
@@ -749,6 +753,22 @@ class Quotationforminfo extends CI_Model
         $obj->comment = $respond->row(0)->comment;
 
         echo json_encode($obj);
+    }
+
+    public function Getreasontype(){
+        $this->db->select('idtbl_reason, type');
+        $this->db->from('tbl_reason');
+        $this->db->where('status', 1);
+    
+        $respond=$this->db->get();
+
+        $data=array();
+
+        foreach ($respond->result() as $row) {
+            $data[]=array("id"=>$row->idtbl_reason, "text"=>$row->type);
+        }
+
+        echo json_encode($data);
     }
 
     public function QuotationformDetailsstatus($x, $y)
@@ -1396,3 +1416,4 @@ class Quotationforminfo extends CI_Model
         // $dompdf->stream("AXEL PROJECTS INVOICE.pdf", ["Attachment" => 0]);
     }
 }
+

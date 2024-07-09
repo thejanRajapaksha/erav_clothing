@@ -46,7 +46,7 @@ include "include/topnavbar.php";
 														<th>Due Date</th>
 														<th>Total</th>
 														<th>Remarks</th>
-														<th class="text-right">Actions</th>
+														<!-- <th class="text-right">Actions</th> -->
 													</tr>
 												</thead>
 											</table>
@@ -69,7 +69,7 @@ include "include/topnavbar.php";
 														<th>Due Date</th>
 														<th>Total</th>
 														<th>Remarks</th>
-														<th class="text-right">Actions</th>
+														<!-- <th class="text-right">Actions</th> -->
 													</tr>
 												</thead>
 											</table>
@@ -92,8 +92,9 @@ include "include/topnavbar.php";
 														<th>Due Date</th>
 														<th>Total</th>
 														<th>Remarks</th>
-                                                        <th>Reason</th>
-														<th class="text-right">Actions</th>
+														<th>Reason</th>
+                                                        <th>Additional Reason</th>
+														<!-- <th class="text-right">Actions</th> -->
 													</tr>
 												</thead>
 											</table>
@@ -199,23 +200,23 @@ include "include/topnavbar.php";
                 {
                     "data": "remarks"
                 },
-                {
-                    "targets": -1,
-                    "className": 'text-right',
-                    "data": null,
-                    "render": function(data, type, full) {
-                        var button='';
-                        button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_quotation']+'"><i class="fas fa-pen"></i></button>';
-                        if(full['status']==1){
-                            button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
-                        }else{
-                            button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
-                        }
-                        button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
+                // {
+                //     "targets": -1,
+                //     "className": 'text-right',
+                //     "data": null,
+                //     "render": function(data, type, full) {
+                //         var button='';
+                //         button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_quotation']+'"><i class="fas fa-pen"></i></button>';
+                //         if(full['status']==1){
+                //             button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
+                //         }else{
+                //             button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
+                //         }
+                //         button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
                         
-                        return button;
-                    }
-                }
+                //         return button;
+                //     }
+                // }
             ],
             drawCallback: function(settings) {
                 $('[data-toggle="tooltip"]').tooltip();
@@ -273,23 +274,23 @@ include "include/topnavbar.php";
                 {
                     "data": "remarks"
                 },
-                {
-                    "targets": -1,
-                    "className": 'text-right',
-                    "data": null,
-                    "render": function(data, type, full) {
-                        var button='';
-                        button+='<button class="btn btn-primary btn-sm btnCreate mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_quotation']+'"><i class="fas fa-list"></i></button>';
-                        if(full['status']==1){
-                            button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
-                        }else{
-                            button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
-                        }
-                        button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
+                // {
+                //     "targets": -1,
+                //     "className": 'text-right',
+                //     "data": null,
+                //     "render": function(data, type, full) {
+                //         var button='';
+                //         button+='<button class="btn btn-primary btn-sm btnCreate mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_quotation']+'"><i class="fas fa-list"></i></button>';
+                //         if(full['status']==1){
+                //             button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
+                //         }else{
+                //             button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
+                //         }
+                //         button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
                         
-                        return button;
-                    }
-                }
+                //         return button;
+                //     }
+                // }
             ],
             drawCallback: function(settings) {
                 $('[data-toggle="tooltip"]').tooltip();
@@ -348,25 +349,28 @@ include "include/topnavbar.php";
                     "data": "remarks"
                 },
                 {
-                    "data": "reject_resone"
+                    "data": "type"
                 },
                 {
-                    "targets": -1,
-                    "className": 'text-right',
-                    "data": null,
-                    "render": function(data, type, full) {
-                        var button='';
-                        button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_quotation']+'"><i class="fas fa-pen"></i></button>';
-                        if(full['status']==1){
-                            button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
-                        }else{
-                            button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
-                        }
-                        button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
+                    "data": "reject_resone"
+                },
+                // {
+                //     "targets": -1,
+                //     "className": 'text-right',
+                //     "data": null,
+                //     "render": function(data, type, full) {
+                //         var button='';
+                //         button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_quotation']+'"><i class="fas fa-pen"></i></button>';
+                //         if(full['status']==1){
+                //             button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
+                //         }else{
+                //             button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
+                //         }
+                //         button+='<a href="<?php echo base_url() ?>Rejectedinquiry/Rejectedinquirystatus/'+full['idtbl_quotation']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
                         
-                        return button;
-                    }
-                }
+                //         return button;
+                //     }
+                // }
             ],
             drawCallback: function(settings) {
                 $('[data-toggle="tooltip"]').tooltip();

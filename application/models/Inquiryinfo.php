@@ -24,14 +24,16 @@ class Inquiryinfo extends CI_Model {
 
         // Insert into tbl_inquiry_detail
         foreach ($tableData as $rowdata) {
-            $tbl_cloth_idtbl_cloth = $rowdata['tbl_cloth_idtbl_cloth'];
+            $tbl_salesrep_idtbl_salesrep = $rowdata['tbl_salesrep_idtbl_salesrep'];
             $tbl_material_idtbl_material = $rowdata['tbl_material_idtbl_material'];
+            $tbl_cloth_idtbl_cloth = $rowdata['tbl_cloth_idtbl_cloth'];
             $quantity = $rowdata['quantity'];
 
             $detailData = [
                 'tbl_inquiry_idtbl_inquiry' => $inquiryID,
+                'tbl_salesrep_idtbl_salesrep' => $tbl_salesrep_idtbl_salesrep,
                 'tbl_cloth_idtbl_cloth' => $tbl_cloth_idtbl_cloth,
-                'tbl_material_idtbl_material' => $tbl_material_idtbl_material,
+                'tbl_material_idtbl_material' => $tbl_material_idtbl_material,                
                 'quantity' => $quantity,
                 'status' => '1',
                 'insertdatetime' => $insertdatetime,
@@ -385,6 +387,14 @@ class Inquiryinfo extends CI_Model {
     public function Getcustomername(){
         $this->db->select('idtbl_customer, name');
         $this->db->from('tbl_customer');
+        $this->db->where('status', 1);
+
+        return $respond=$this->db->get();
+    }
+
+    public function Getsalesrepname(){
+        $this->db->select('idtbl_salesrep, name');
+        $this->db->from('tbl_salesrep');
         $this->db->where('status', 1);
 
         return $respond=$this->db->get();

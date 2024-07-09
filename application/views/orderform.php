@@ -79,36 +79,41 @@ include "include/topnavbar.php";
 									<input type="date" class="form-control form-control-sm" placeholder="" name="duedate" id="duedate" value="<?php echo date('Y-m-d') ?>" required>
 								</div>
 							</div>
-							<div class="form-row mb-1">
-								<div class="col">
-									<label class="small font-weight-bold text-dark">Customer*</label>
-									<select class="form-control form-control-sm" name="customer" id="customer" required>
-										<option value="">Select</option>
-										<?php foreach ($customerlist->result() as $rowcustomerlist) { ?>
-											<option value="<?php echo $rowcustomerlist->tbl_customer_idtbl_customer ?>"><?php echo $rowcustomerlist->name ?></option>
-										<?php } ?>
-									</select>
-								</div>
+							<div class="form-group mb-1">
+								<label class="small font-weight-bold">Customer Name*</label>
+								<select class="form-control form-control-sm" name="customername"
+									id="customername" required>
+									<option value="">Select</option>
+									<?php foreach($Customername->result() as $rowCustomername){ ?>
+									<option value="<?php echo $rowCustomername->idtbl_customer ?>">
+										<?php echo $rowCustomername->name ?></option>
+									<?php } ?>
+								</select>
 							</div>
-							<div class="form-row mb-1">
-								<div class="col">
-									<label class="small font-weight-bold text-dark">Cloth Type*</label>
-									<select class="form-control form-control-sm" name="product" id="product" required>
-										<option value="">Select</option>
-										<?php foreach ($productlst->result() as $rowproductlst) { ?>
-											<option value="<?php echo $rowproductlst->idtbl_cloth ?>"><?php echo $rowproductlst->type ?></option>
-										<?php } ?>
-									</select>
-								</div>
-
-								<div class="col">
-									<label class="small font-weight-bold text-dark">Meterial Type*</label>
-									<select class="form-control form-control-sm" name="meterial" id="meterial" required>
-										<option value="">Select</option>
-
-									</select>
-								</div>
+							<div class="form-group mb-1">
+								<label class="small font-weight-bold">Cloth type*</label>
+								<select class="form-control form-control-sm" name="clothtype"
+									id="clothtype" required>
+									<option value="">Select</option>
+									<?php foreach($Clothtype->result() as $rowClothtype){ ?>
+									<option value="<?php echo $rowClothtype->idtbl_cloth ?>">
+										<?php echo $rowClothtype->type ?></option>
+									<?php } ?>
+								</select>
 							</div>
+
+							<div class="form-group mb-1">
+								<label class="small font-weight-bold">Material type*</label>
+								<select class="form-control form-control-sm" name="materialtype"
+									id="materialtype" required>
+									<option value="">Select</option>
+									<?php foreach($Materialtype->result() as $rowMaterialtype){ ?>
+									<option value="<?php echo $rowMaterialtype->idtbl_material ?>">
+										<?php echo $rowMaterialtype->type ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							
 							<div class="form-row mb-1">
 								<div class="col">
 									<label class="small font-weight-bold text-dark">Qty*</label>
@@ -410,193 +415,9 @@ include "include/topnavbar.php";
 			}
 		});
 
-		$('#dataTable').on('click', '.btninfo', function() {
+		
 
-			var cusId = $(this).attr('id');
-			//	alert(cusId);
-			$.ajax({
-				type: "POST",
-				data: {
-					cusId: cusId,
-
-				},
-				url: '<?php echo base_url() ?>Orderform/Orderformgetinfodata',
-				success: function(result) { //alert(result);
-					//console.log(result);
-					$('#ordermodal').modal('show');
-					$('#getorderdataform').html(result);
-
-				}
-			});
-
-			//Getorder(orderId);
-
-		});
-
-
-
-		$('#dataTable').on('click', '.approvebtn', function() {
-
-			var recordID = $(this).attr('id');
-			var type = $('.approvebtn').val();
-			//alert(recordID);
-			//alert(type);
-			if (type == 2) {
-				var r = confirm("Are you sure, You want to disapprove this ? ");
-
-			} else {
-				var r = confirm("Are you sure, You want to approve this ? ");
-			}
-
-			if (r == true) {
-
-				$.ajax({
-					type: "POST",
-					data: {
-						recordID: recordID,
-						type: type,
-
-					},
-					url: '<?php echo base_url() ?>Orderform/Orderformapprovestatus',
-					success: function(result) { //alert(result);
-						var obj = JSON.parse(result);
-						if (obj.status == 1) {
-
-							setTimeout(function() {
-								window.location.reload();
-
-							}, 700);
-						}
-						action(obj.action);
-					}
-				});
-			}
-
-		});
-
-		$('#dataTable').on('click', '.approvebtnelse', function() {
-
-			var recordID = $(this).attr('id');
-			var type = $('.approvebtnelse').val();
-
-			//alert(recordID);
-			//alert(type);
-			if (type == 2) {
-				var r = confirm("Are you sure, You want to disapprove this ? ");
-
-			} else {
-				var r = confirm("Are you sure, You want to approve this ? ");
-			}
-
-			if (r == true) {
-
-				$.ajax({
-					type: "POST",
-					data: {
-						recordID: recordID,
-						type: type,
-
-					},
-					url: '<?php echo base_url() ?>Orderform/Orderformapprovestatus',
-					success: function(result) { //alert(result);
-						var obj = JSON.parse(result);
-						if (obj.status == 1) {
-
-							setTimeout(function() {
-								window.location.reload();
-
-							}, 700);
-						}
-						action(obj.action);
-					}
-				});
-			}
-
-		});
-
-		$('#dataTable').on('click', '.btnstatus', function() {
-
-			var recordID = $(this).attr('id');
-			var type = $('.btnstatus').val();
-			//alert(recordID);
-			//alert(type);
-			if (type == 2) {
-				var r = confirm("Are you sure you want to deactive this?");
-			} else {
-				var r = confirm("Are you sure you want to active this?");
-			}
-
-			if (r == true) {
-				$.ajax({
-					type: "POST",
-					data: {
-						recordID: recordID,
-						type: type,
-
-					},
-					url: '<?php echo base_url() ?>Orderform/Orderformstatus',
-					success: function(result) { //alert(result);
-						var obj = JSON.parse(result);
-						if (obj.status == 1) {
-
-							setTimeout(function() {
-								window.location.reload();
-
-							}, 400);
-						}
-						action(obj.action);
-					}
-				});
-			}
-
-		});
-		$('#dataTable').on('click', '.btnstatuselse', function() {
-
-			var recordID = $(this).attr('id');
-			var type = $('.btnstatuselse').val();
-
-			//alert(type);
-			if (type == 2) {
-				var r = confirm("Are you sure you want to deactive this?");
-			} else {
-				var r = confirm("Are you sure you want to active this?");
-			}
-
-			if (r == true) {
-				$.ajax({
-					type: "POST",
-					data: {
-						recordID: recordID,
-						type: type,
-
-					},
-					url: '<?php echo base_url() ?>Orderform/Orderformstatus',
-					success: function(result) { //alert(result);
-						var obj = JSON.parse(result);
-						if (obj.status == 1) {
-
-							setTimeout(function() {
-								window.location.reload();
-
-							}, 400);
-						}
-						action(obj.action);
-					}
-				});
-			}
-
-		});
-		$('#dataTable').on('click', '.btndlt', function() {
-
-			$('#inquiryCancelModal').modal('show');
-			var recordID = $(this).attr('id');
-			var type = $('.btndlt').val();
-
-			rejectreason(recordID, type);
-
-
-		});
-
+		
 	});
 
 	$('#meterial').on('change', function() {

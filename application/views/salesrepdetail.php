@@ -13,7 +13,7 @@ include "include/topnavbar.php";
                     <div class="page-header-content py-3">
                         <h1 class="page-header-title font-weight-light">
                             <div class="page-header-icon"><i class="fas fa-shopping-basket"></i></div>
-                            <span>Customers Detail</span>
+                            <span>Sales Rep Detail</span>
                         </h1>
                     </div>
                 </div>
@@ -23,11 +23,11 @@ include "include/topnavbar.php";
                     <div class="card-body p-0 p-2">
                         <div class="row">
                         	<div class="col-3">
-                        		<form action="<?php echo base_url() ?>Customerdetail/Customerdetailinsertupdate"
+                        		<form action="<?php echo base_url() ?>Salesrepdetail/Salesrepdetailinsertupdate"
                         			method="post" autocomplete="off">
 
                         			<div class="form-group mb-1">
-                                        <label class="small font-weight-bold">Customer Name*</label>
+                                        <label class="small font-weight-bold">Sales Rep Name*</label>
                                         <input type="text" class="form-control form-control-sm" name="name" id="name" required>
                                     </div>
                                     <div class="form-group mb-1">
@@ -49,14 +49,12 @@ include "include/topnavbar.php";
                                     <div class="form-group mb-1">
                                         <label class="small font-weight-bold">NIC*</label>
                                         <input type="text" class="form-control form-control-sm" name="nic" id="nic" >
+                                    </div>                        			 
+                                    <div class="form-group mt-2 text-right">
+                                        <button type="submit" id="submitBtn" class="btn btn-primary btn-sm px-4"
+                                            <?php if($addcheck == 0){echo 'disabled';} ?>><i
+                                                class="far fa-save"></i>&nbsp;Add</button>
                                     </div>
-
-                        			 
-                        	<div class="form-group mt-2 text-right">
-                        		<button type="submit" id="submitBtn" class="btn btn-primary btn-sm px-4"
-                        			<?php if($addcheck==0){echo 'disabled';} ?>><i
-                        				class="far fa-save"></i>&nbsp;Add</button>
-                        	</div>
                         	<input type="hidden" name="recordOption" id="recordOption" value="1">
                         	<input type="hidden" name="recordID" id="recordID" value="">
                         	</form>
@@ -68,7 +66,7 @@ include "include/topnavbar.php";
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Customer Name</th>
+                                            <th>Sales Rep Name</th>
                                             <th>Email</th>
                                             <th>Contact No 1</th>
                                             <th>Contact No 2</th>
@@ -123,14 +121,14 @@ include "include/topnavbar.php";
                 // 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             ajax: {
-                url: "<?php echo base_url() ?>scripts/customerdetaillist.php",
+                url: "<?php echo base_url() ?>scripts/salesrepdetaillist.php",
                 type: "POST", // you can use GET
                 // data: function(d) {}
             },
             "order": [[ 0, "desc" ]],
             "columns": [
                 {
-                    "data": "idtbl_customer"
+                    "data": "idtbl_salesrep"
                 },
                 {
                     "data": "name"
@@ -156,13 +154,13 @@ include "include/topnavbar.php";
                     "data": null,
                     "render": function(data, type, full) {
                         var button='';
-                        button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_customer']+'"><i class="fas fa-pen"></i></button>';
+                        button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_salesrep']+'"><i class="fas fa-pen"></i></button>';
                         if(full['status']==1){
-                            button+='<a href="<?php echo base_url() ?>Customerdetail/Customerdetailstatus/'+full['idtbl_customer']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
+                            button+='<a href="<?php echo base_url() ?>Salesrepdetail/Salesrepdetailstatus/'+full['idtbl_salesrep']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
                         }else{
-                            button+='<a href="<?php echo base_url() ?>Customerdetail/Customerdetailstatus/'+full['idtbl_customer']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
+                            button+='<a href="<?php echo base_url() ?>Salesrepdetail/Salesrepdetailstatus/'+full['idtbl_salesrep']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
                         }
-                        button+='<a href="<?php echo base_url() ?>Customerdetail/Customerdetailstatus/'+full['idtbl_customer']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
+                        button+='<a href="<?php echo base_url() ?>Salesrepdetail/Salesrepdetailstatus/'+full['idtbl_salesrep']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
                         
                         return button;
                     }
@@ -181,7 +179,7 @@ include "include/topnavbar.php";
                     data: {
                         recordID: id
                     },
-                    url: '<?php echo base_url() ?>Customerdetail/Customerdetailedit',
+                    url: '<?php echo base_url() ?>Salesrepdetail/Salesrepdetailedit',
                     success: function(result) { //alert(result);
                         var obj = JSON.parse(result);
                         $('#recordID').val(obj.id);
