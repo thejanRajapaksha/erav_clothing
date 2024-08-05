@@ -689,6 +689,7 @@ include "include/topnavbar.php";
 			}
 		});
 	});
+		
 	$('#product').on('change', function() {
 		var productid = $('#product').val();
 		var getid = $('#getid').val();

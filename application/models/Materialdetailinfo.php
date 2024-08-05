@@ -1,282 +1,122 @@
 <?php
 class Materialdetailinfo extends CI_Model{
-    public function Getmaterialcategory(){
-        $this->db->select('`idtbl_res_material_category`, `category`');
-        $this->db->from('tbl_res_material_category');
-        $this->db->where('status', 1);
-
-        return $respond=$this->db->get();
-    }
-
-    public function Materialdetailinsertupdate(){
-        $this->db->trans_begin();
-
-        $userID=$_SESSION['userid'];
-
-        $materialname=$this->input->post('name');
-        $materialcode=$this->input->post('code');
-        $materialcategory=$this->input->post('materialcategory');
-        $comment=$this->input->post('comment');  
-        
-
-        $recordOption=$this->input->post('recordOption');
-        if(!empty($this->input->post('recordID'))){$recordID=$this->input->post('recordID');}
-
-        $updatedatetime=date('Y-m-d H:i:s');  
-
-        if($recordOption==1){
-            $data = array(
-                'material'=> $materialname, 
-                'materialinfocode'=> $materialcode, 
-                'reorderlevel'=> '0', 
-                'comment'=> $comment, 
-                'status'=> '1', 
-                'insertdatetime'=> $updatedatetime, 
-                'tbl_res_user_idtbl_res_user'=> $userID, 
-                'tbl_res_material_category_idtbl_res_material_category'=> $materialcategory, 
-            );
-
-            $this->db->insert('tbl_res_material_info', $data);
-
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-save';
-                $actionObj->title='';
-                $actionObj->message='Record Added Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='success';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');                
-            } else {
-                $this->db->trans_rollback();
-
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');
-            }
+    public function Getmaterialcategory() {
+        $inquiryid = $this->input->post('inquiryid');
+    
+        $this->db->select('tbl_material.idtbl_material, tbl_material.type');
+        $this->db->from('tbl_material');
+        $this->db->join('tbl_inquiry_detail', 'tbl_material.idtbl_material = tbl_inquiry_detail.tbl_material_idtbl_material');
+        $this->db->where('tbl_inquiry_detail.tbl_inquiry_idtbl_inquiry', $inquiryid);
+        $this->db->where('tbl_material.status', 1);
+    
+        $respond = $this->db->get();
+        $data = array();
+        foreach ($respond->result() as $row) {
+            $data[] = array("id" => $row->idtbl_material, "text" => $row->type);
         }
-        else{
-            $data = array(
-                'material'=> $materialname, 
-                'materialinfocode'=> $materialcode, 
-                'reorderlevel'=> '0', 
-                'comment'=> $comment, 
-                'updatedatetime'=> $updatedatetime, 
-                'tbl_res_material_category_idtbl_res_material_category'=> $materialcategory
-            );
-
-            $this->db->where('idtbl_res_material_info', $recordID);
-            $this->db->update('tbl_res_material_info', $data);
-
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-save';
-                $actionObj->title='';
-                $actionObj->message='Record Update Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='primary';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');                
-            } else {
-                $this->db->trans_rollback();
-
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');
-            }
-        }
+        echo json_encode($data);
     }
-    public function Materialdetailstatus($x, $y){
+    
+
+    public function Materialdetailinsertupdate() {
         $this->db->trans_begin();
-
-        $userID=$_SESSION['userid'];
-        $recordID=$x;
-        $type=$y;
-        $updatedatetime=date('Y-m-d H:i:s');
-
-        if($type==1){
-            $data = array(
+    
+        $userID = $_SESSION['userid'];
+    
+        $jsonObj = json_decode($this->input->post('tableData'), true);
+        $inquiryid = $this->input->post('inquiryid');
+    
+        $insertdatetime = date('Y-m-d H:i:s');
+    
+        $this->db->select('o.idtbl_order');
+        $this->db->from('tbl_order AS o');
+        $this->db->where('o.tbl_inquiry_idtbl_inquiry', $inquiryid);
+        $query = $this->db->get('tbl_order');
+        $order = $query->row();
+        $orderID = $order->idtbl_order;
+    
+        // Loop through each record and insert into tbl_material_detail
+        foreach ($jsonObj as $rowdata) {
+            $mtype = $rowdata['col_1'];
+            $oquantity = $rowdata['col_3'];
+            $morderdate = $rowdata['col_4'];
+            $remarks = $rowdata['col_5'];
+    
+            $MaterialDetailData = array(
+                'tbl_order_idtbl_order' => $orderID,
+                'tbl_inquiry_idtbl_inquiry' => $inquiryid,
+                'tbl_material_idtbl_material ' => $mtype,
+                'mat_quantity' => $oquantity,
+                'mat_odate' => $morderdate,
+                'mat_remarks' => $remarks,
                 'status' => '1',
-                'updatedatetime'=> $updatedatetime
+                'insertdatetime' => $insertdatetime,
+                'tbl_user_idtbl_user' => $userID
             );
-
-            $this->db->where('idtbl_res_material_info', $recordID);
-            $this->db->update('tbl_res_material_info', $data);
-
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-check';
-                $actionObj->title='';
-                $actionObj->message='Record Activate Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='success';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');                
-            } else {
-                $this->db->trans_rollback();
-
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');
-            }
+    
+            $this->db->insert('tbl_material_detail', $MaterialDetailData);
         }
-        else if($type==2){
-            $data = array(
-                'status' => '2',
-                'updatedatetime'=> $updatedatetime
-            );
-
-            $this->db->where('idtbl_res_material_info', $recordID);
-            $this->db->update('tbl_res_material_info', $data);
-
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-times';
-                $actionObj->title='';
-                $actionObj->message='Record Deactivate Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='warning';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');                
-            } else {
-                $this->db->trans_rollback();
-
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');
-            }
+    
+        $this->db->trans_complete();
+    
+        if ($this->db->trans_status() === TRUE) {
+            $this->db->trans_commit();
+    
+            $actionObj = new stdClass();
+            $actionObj->icon = 'fas fa-save';
+            $actionObj->title = '';
+            $actionObj->message = 'Material Details Added Successfully';
+            $actionObj->url = '';
+            $actionObj->target = '_blank';
+            $actionObj->type = 'success';
+    
+            $actionJSON = json_encode($actionObj);
+            
+        } else {
+            $this->db->trans_rollback();
+    
+            $actionObj = new stdClass();
+            $actionObj->icon = 'fas fa-warning';
+            $actionObj->title = '';
+            $actionObj->message = 'Material Details Addition Failed';
+            $actionObj->url = '';
+            $actionObj->target = '_blank';
+            $actionObj->type = 'danger';
+    
+            $actionJSON = json_encode($actionObj);
         }
-        else if($type==3){
-            $data = array(
-                'status' => '3',
-                'updatedatetime'=> $updatedatetime
-            );
 
-            $this->db->where('idtbl_res_material_info', $recordID);
-            $this->db->update('tbl_res_material_info', $data);
+        echo $actionJSON;
+    }    
 
-            $this->db->trans_complete();
+    public function Getmaterialdetails() {
+        $inquiryid = $this->input->post('inquiryid');
 
-            if ($this->db->trans_status() === TRUE) {
-                $this->db->trans_commit();
-                
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-trash-alt';
-                $actionObj->title='';
-                $actionObj->message='Record Remove Successfully';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
+        $this->db->select('md.mat_quantity, md.mat_odate, md.mat_remarks, m.type, md.tbl_material_idtbl_material, md.tbl_order_idtbl_order, md.mat_balance');
+        $this->db->from('tbl_material_detail md');
+        $this->db->join('tbl_material m', 'md.tbl_material_idtbl_material = m.idtbl_material', 'left');
+        $this->db->where('md.tbl_inquiry_idtbl_inquiry ', $inquiryid);
+        $result = $this->db->get();
 
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');                
-            } else {
-                $this->db->trans_rollback();
-
-                $actionObj=new stdClass();
-                $actionObj->icon='fas fa-warning';
-                $actionObj->title='';
-                $actionObj->message='Record Error';
-                $actionObj->url='';
-                $actionObj->target='_blank';
-                $actionObj->type='danger';
-
-                $actionJSON=json_encode($actionObj);
-                
-                $this->session->set_flashdata('msg', $actionJSON);
-                redirect('Materialdetail');
-            }
-        }
+        return $result->result_array();
+        
     }
-    public function Materialdetailedit(){
-        $recordID=$this->input->post('recordID');
 
-        $this->db->select('*');
-        $this->db->from('tbl_res_material_info');
-        $this->db->where('idtbl_res_material_info', $recordID);
-        $this->db->where('status', 1);
-
-        $respond=$this->db->get();
-
-        $obj=new stdClass();
-        $obj->id=$respond->row(0)->idtbl_res_material_info;
-        $obj->materialname=$respond->row(0)->material;
-        $obj->materialinfocode=$respond->row(0)->materialinfocode;
-        $obj->materialcategory=$respond->row(0)->tbl_res_material_category_idtbl_res_material_category ;
-        $obj->comment=$respond->row(0)->comment;
-
-
-        echo json_encode($obj);
+    public function Savematerialbalances() {
+        $materialBalances = $this->input->post('materialBalances');
+    
+        foreach ($materialBalances as $materialBalance) {
+            $data = array(
+                'mat_balance' => $materialBalance['mat_balance']
+            );
+    
+            $this->db->where('tbl_order_idtbl_order', $materialBalance['tbl_order_idtbl_order']);
+            $this->db->where('tbl_material_idtbl_material', $materialBalance['tbl_material_idtbl_material']);
+            $this->db->update('tbl_material_detail', $data); 
+        }
+    
+        echo json_encode(array('success' => true));
     }
+    
 
 }

@@ -23,10 +23,10 @@ include "include/topnavbar.php";
                     <div class="card-body p-0 p-2">
                         <div class="row">
                             <div class="col-3">
-                                <form action="<?php echo base_url() ?>Sizetype/Sizetypeinsertupdate" method="post" autocomplete="off">
+                                <form action="<?php echo base_url() ?>Banktype/Banktypeinsertupdate" method="post" autocomplete="off">
                                     <div class="form-group mb-1">
-                                        <label class="small font-weight-bold">Size type*</label>
-                                        <input type="text" class="form-control form-control-sm" name="type" id="type" required>
+                                        <label class="small font-weight-bold">Bank Name*</label>
+                                        <input type="text" class="form-control form-control-sm" name="bname" id="bname" required>
                                     </div>
                                     <div class="form-group mt-2 text-right">
                                         <button type="submit" id="submitBtn" class="btn btn-primary btn-sm px-4" <?php if($addcheck==0){echo 'disabled';}  ?>><i class="far fa-save"></i>&nbsp;Add</button>
@@ -40,7 +40,7 @@ include "include/topnavbar.php";
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Size type</th>
+                                            <th>Bank Name</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
                                     </thead>
@@ -89,17 +89,17 @@ include "include/topnavbar.php";
                 // 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             ajax: {
-                url: "<?php echo base_url() ?>scripts/sizetypelist.php",
+                url: "<?php echo base_url() ?>scripts/banknamelist.php",
                 type: "POST", // you can use GET
                 // data: function(d) {}
             },
             "order": [[ 0, "desc" ]],
             "columns": [
                 {
-                    "data": "idtbl_size"
+                    "data": "idtbl_bank"
                 },
                 {
-                    "data": "type"
+                    "data": "bname"
                 },
                 {
                     "targets": -1,
@@ -107,13 +107,13 @@ include "include/topnavbar.php";
                     "data": null,
                     "render": function(data, type, full) {
                         var button='';
-                        button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_size']+'"><i class="fas fa-pen"></i></button>';
+                        button+='<button class="btn btn-primary btn-sm btnEdit mr-1 ';if(editcheck!=1){button+='d-none';}button+='" id="'+full['idtbl_bank']+'"><i class="fas fa-pen"></i></button>';
                         if(full['status']==1){
-                            button+='<a href="<?php echo base_url() ?>Sizetype/Sizetypestatus/'+full['idtbl_size']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
+                            button+='<a href="<?php echo base_url() ?>Banktype/Banktypestatus/'+full['idtbl_bank']+'/2" onclick="return deactive_confirm()" target="_self" class="btn btn-success btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-check"></i></a>';
                         }else{
-                            button+='<a href="<?php echo base_url() ?>Sizetype/Sizetypestatus/'+full['idtbl_size']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
+                            button+='<a href="<?php echo base_url() ?>Banktype/Banktypestatus/'+full['idtbl_bank']+'/1" onclick="return active_confirm()" target="_self" class="btn btn-warning btn-sm mr-1 ';if(statuscheck!=1){button+='d-none';}button+='"><i class="fas fa-times"></i></a>';
                         }
-                        button+='<a href="<?php echo base_url() ?>Sizetype/Sizetypestatus/'+full['idtbl_size']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
+                        button+='<a href="<?php echo base_url() ?>Banktype/Banktypestatus/'+full['idtbl_bank']+'/3" onclick="return delete_confirm()" target="_self" class="btn btn-danger btn-sm ';if(deletecheck!=1){button+='d-none';}button+='"><i class="fas fa-trash-alt"></i></a>';
                         
                         return button;
                     }
@@ -123,7 +123,6 @@ include "include/topnavbar.php";
                 $('[data-toggle="tooltip"]').tooltip();
             }
         });
-        
         $('#dataTable tbody').on('click', '.btnEdit', function() {
             var r = confirm("Are you sure, You want to Edit this ? ");
             if (r == true) {
@@ -133,11 +132,11 @@ include "include/topnavbar.php";
                     data: {
                         recordID: id
                     },
-                    url: '<?php echo base_url() ?>Sizetype/Sizetypeedit',
+                    url: '<?php echo base_url() ?>Banktype/Banktypeedit',
                     success: function(result) { //alert(result);
                         var obj = JSON.parse(result);
                         $('#recordID').val(obj.id);
-                        $('#type').val(obj.type);                                             
+                        $('#bname').val(obj.bname);                                             
 
                         $('#recordOption').val('2');
                         $('#submitBtn').html('<i class="far fa-save"></i>&nbsp;Update');

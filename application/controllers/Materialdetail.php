@@ -8,7 +8,6 @@ class Materialdetail extends CI_Controller {
         $this->load->model('Commeninfo');
         $this->load->model('Materialdetailinfo');
 		$result['menuaccess']=$this->Commeninfo->Getmenuprivilege();
-        $result['materialcategory']=$this->Materialdetailinfo->Getmaterialcategory();
 		$this->load->view('materialdetail', $result);
 	}
     public function Materialdetailinsertupdate(){
@@ -19,9 +18,10 @@ class Materialdetail extends CI_Controller {
 		$this->load->model('Materialdetailinfo');
         $result=$this->Materialdetailinfo->Materialdetailstatus($x, $y);
 	}
-    public function Materialdetailedit(){
+    public function Getmaterialdetails() {	
 		$this->load->model('Materialdetailinfo');
-        $result=$this->Materialdetailinfo->Materialdetailedit();
+		$material_details = $this->Materialdetailinfo->Getmaterialdetails();	
+		echo json_encode($material_details);
 	}
     public function Materialdetailupload(){
 		$this->load->model('Materialdetailinfo');
@@ -30,5 +30,13 @@ class Materialdetail extends CI_Controller {
     public function Materialdetailcheck(){
 		$this->load->model('Materialdetailinfo');
         $result=$this->Materialdetailinfo->Materialdetailcheck();
+	}
+	public function Savematerialbalances(){
+		$this->load->model('Materialdetailinfo');
+        $this->Materialdetailinfo->Savematerialbalances();
+	}
+    public function Getmaterialcategory(){		
+		$this->load->model('Materialdetailinfo');
+		$result=$this->Materialdetailinfo->Getmaterialcategory();		
 	}
 }
